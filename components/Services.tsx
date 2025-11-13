@@ -95,15 +95,15 @@ export default function Services() {
   return (
     <section className="bg-background py-24">
       <div className="mx-auto w-full max-w-6xl space-y-16 px-4 sm:px-6">
-        <div className="grid gap-16 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-12 md:grid-cols-2 xl:grid-cols-3">
           {items.map((service) => (
-            <div key={service.title} className="space-y-6">
-              <span className="text-sm font-semibold uppercase tracking-[0.35em] text-foreground/40">
+            <div key={service.title} className="space-y-6 text-center md:text-left">
+              <span className="block text-xs font-semibold uppercase tracking-[0.35em] text-foreground/40">
                 {service.number}
               </span>
-              <div className="flex items-center gap-4 text-foreground/30">
+              <div className="flex items-center justify-center gap-4 text-foreground/30 md:justify-start">
                 {service.icon}
-                <span className="font-serif text-3xl italic text-foreground/40">
+                <span className="font-serif text-2xl italic text-foreground/40 md:text-3xl">
                   {service.title}
                 </span>
               </div>
