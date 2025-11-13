@@ -62,8 +62,8 @@ export default function Showcase() {
   const projects = getAllProjects().slice(0, 4);
 
   return (
-    <section className="bg-background py-24">
-      <div className="mx-auto w-full max-w-6xl space-y-12 px-4 sm:px-6">
+    <section className="bg-background py-16">
+      <div className="mx-auto w-full max-w-6xl space-y-8 px-4 sm:px-6">
         <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-foreground/60">
@@ -81,7 +81,7 @@ export default function Showcase() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
           {projects.map((project) => (
             <ShowcaseCard key={project.slug} project={project} />
           ))}

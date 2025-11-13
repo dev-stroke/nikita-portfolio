@@ -7,41 +7,49 @@ export interface Post {
   date: string;
   author?: string;
   tags?: string[];
+  category?: string;
 }
 
 const posts: Post[] = [
   {
-    slug: 'getting-started-with-nextjs',
-    title: 'Getting Started with Next.js',
-    excerpt: 'Learn the basics of Next.js and build your first application',
+    slug: 'self-care-being-free',
+    title: 'Self care & being free',
+    excerpt:
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     content:
-      'Next.js is a powerful React framework that enables you to build full-stack web applications. In this post, we\'ll explore the fundamentals and get you started on your journey.\n\nNext.js provides features like server-side rendering, static site generation, and API routes out of the box. This makes it an excellent choice for building modern web applications.',
-    image: '/images/blog/nextjs.jpg',
-    date: '2024-01-10',
-    author: 'John Doe',
-    tags: ['Next.js', 'React', 'Web Development'],
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    date: '2025-01-12',
+    category: 'HEALTH',
   },
   {
-    slug: 'design-trends-2024',
-    title: 'Design Trends for 2024',
-    excerpt: 'Exploring the latest design trends shaping the digital landscape',
+    slug: 'my-favourite-drinks',
+    title: 'My Favourite Drinks',
+    excerpt:
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     content:
-      'The design world is constantly evolving, and 2024 brings exciting new trends. From bold typography to minimalist interfaces, we\'ll explore what\'s shaping the future of design.\n\nKey trends include:\n- Glassmorphism\n- Dark mode optimization\n- Micro-interactions\n- Sustainable design practices',
-    image: '/images/blog/design-trends.jpg',
-    date: '2024-02-05',
-    author: 'Jane Smith',
-    tags: ['Design', 'UI/UX', 'Trends'],
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    date: '2025-01-10',
+    category: 'FOODS',
   },
   {
-    slug: 'optimizing-web-performance',
-    title: 'Optimizing Web Performance',
-    excerpt: 'Tips and techniques for building faster websites',
+    slug: 'taking-good-portraits',
+    title: 'Taking Good Portraits',
+    excerpt:
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     content:
-      'Performance is crucial for user experience and SEO. In this post, we\'ll discuss various techniques to optimize your website\'s performance.\n\nWe\'ll cover:\n- Image optimization\n- Code splitting\n- Caching strategies\n- Lazy loading\n- Performance monitoring tools',
-    image: '/images/blog/performance.jpg',
-    date: '2024-03-15',
-    author: 'Mike Johnson',
-    tags: ['Performance', 'Optimization', 'Web Development'],
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    date: '2025-01-08',
+    category: 'TIPS & TRICKS',
+  },
+  {
+    slug: 'morning-routine',
+    title: 'Morning Routine',
+    excerpt:
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    date: '2025-01-05',
+    category: 'LIFESTYLE',
   },
 ];
 

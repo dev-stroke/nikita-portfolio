@@ -1,6 +1,13 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { getAllPosts } from '@/lib/posts';
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  return `${month} ${day}`;
+}
 
 export default function BlogList() {
   const posts = getAllPosts();
@@ -8,39 +15,29 @@ export default function BlogList() {
   return (
     <div className="space-y-8">
       {posts.map((post) => (
-        <Link
+        <article
           key={post.slug}
-          href={`/blog/${post.slug}`}
-          className="block group"
+          className="border border-foreground/20 bg-background/70 px-6 py-8 sm:px-8"
         >
-          <article className="bg-zinc-50 dark:bg-zinc-900 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-            <div className="md:flex">
-              {post.image && (
-                <div className="relative md:w-64 h-48 md:h-auto flex-shrink-0">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
-              <div className="p-6 flex-1">
-                <h2 className="text-2xl font-semibold mb-2 text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {post.title}
-                </h2>
-                <p className="text-sm text-zinc-500 dark:text-zinc-500 mb-3">
-                  {post.date}
-                </p>
-                <p className="text-zinc-600 dark:text-zinc-400 line-clamp-2">
-                  {post.excerpt || post.content.substring(0, 150)}...
-                </p>
-              </div>
-            </div>
-          </article>
-        </Link>
+          <div className="mb-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-foreground/50">
+              {formatDate(post.date)} - {post.category}
+            </p>
+          </div>
+          <h2 className="mb-4 font-serif text-[clamp(2rem,4vw,3rem)] text-foreground">
+            {post.title}
+          </h2>
+          <p className="mb-6 text-base leading-relaxed text-foreground/60">
+            {post.excerpt || post.content}
+          </p>
+          <Link
+            href={`/blog/${post.slug}`}
+            className="inline-flex items-center rounded-full border border-dashed border-foreground/30 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-foreground transition-colors hover:border-foreground hover:bg-foreground/5"
+          >
+            Read More
+          </Link>
+        </article>
       ))}
     </div>
   );
 }
-

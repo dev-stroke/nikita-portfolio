@@ -25,9 +25,9 @@ export default function ClientsStrip() {
   };
 
   return (
-    <section className="bg-background py-16">
+    <section className="bg-background py-12">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <div className="flex items-center justify-center gap-10 overflow-x-auto md:hidden">
+        <div className="flex items-center justify-center gap-8 overflow-x-auto md:hidden">
           {clients.map((client) => (
             <div key={client.name} className="flex min-w-[90px] flex-col items-center gap-2 text-foreground/50">
               <div className="relative h-12 w-12">
@@ -49,7 +49,7 @@ export default function ClientsStrip() {
           >
             &larr;
           </button>
-          <div className="flex flex-1 items-center justify-center gap-12 px-6">
+          <div className="flex flex-1 items-center justify-center gap-8 px-6">
             {visibleClients.map((client) => (
               <div key={client.name} className="flex flex-col items-center gap-2 text-foreground/50">
                 <div className="relative h-14 w-14">

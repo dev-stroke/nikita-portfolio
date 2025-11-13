@@ -6,6 +6,7 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,7 +21,7 @@ export default function ContactForm() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setSubmitStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', subject: '', message: '' });
     } catch {
       setSubmitStatus('error');
     } finally {
@@ -40,75 +41,73 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label
-          htmlFor="name"
-          className="block text-sm font-medium mb-2 text-foreground"
-        >
-          Name
-        </label>
         <input
           type="text"
           id="name"
           name="name"
+          placeholder="Name"
           value={formData.name}
           onChange={handleChange}
           required
-          className="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-3 bg-transparent border border-dashed border-foreground/30 rounded-lg text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-foreground/60 transition-colors"
         />
       </div>
 
       <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium mb-2 text-foreground"
-        >
-          Email
-        </label>
         <input
           type="email"
           id="email"
           name="email"
+          placeholder="E-Mail"
           value={formData.email}
           onChange={handleChange}
           required
-          className="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-3 bg-transparent border border-dashed border-foreground/30 rounded-lg text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-foreground/60 transition-colors"
         />
       </div>
 
       <div>
-        <label
-          htmlFor="message"
-          className="block text-sm font-medium mb-2 text-foreground"
-        >
-          Message
-        </label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          placeholder="Subject"
+          value={formData.subject}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-3 bg-transparent border border-dashed border-foreground/30 rounded-lg text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-foreground/60 transition-colors"
+        />
+      </div>
+
+      <div>
         <textarea
           id="message"
           name="message"
+          placeholder="Message"
           value={formData.message}
           onChange={handleChange}
           required
           rows={6}
-          className="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          className="w-full px-4 py-3 bg-transparent border border-dashed border-foreground/30 rounded-lg text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-foreground/60 resize-none transition-colors"
         />
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full px-8 py-4 bg-foreground text-background rounded-full font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full px-8 py-4 bg-foreground text-background rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting ? 'Sending...' : 'Send Message'}
       </button>
 
       {submitStatus === 'success' && (
-        <p className="text-green-600 dark:text-green-400 text-center">
+        <p className="text-green-600 dark:text-green-400 text-center text-sm">
           Message sent successfully!
         </p>
       )}
 
       {submitStatus === 'error' && (
-        <p className="text-red-600 dark:text-red-400 text-center">
+        <p className="text-red-600 dark:text-red-400 text-center text-sm">
           Something went wrong. Please try again.
         </p>
       )}

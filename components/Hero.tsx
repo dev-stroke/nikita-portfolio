@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 const stats = [
   { value: '20,000+', label: 'Hours of Experience' },
@@ -9,19 +11,81 @@ const stats = [
 ];
 
 export default function Hero() {
+  const [isHovering, setIsHovering] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isHovering) {
+        setMousePosition({ x: e.clientX, y: e.clientY });
+      }
+    };
+
+    if (isHovering) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [isHovering]);
+
   return (
-    <section className="relative overflow-hidden bg-background">
-      <div className="mx-auto flex min-h-[calc(100vh-96px)] w-full max-w-6xl flex-col justify-center gap-12 px-4 py-16 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
-        <div className="max-w-xl space-y-8 text-center lg:text-left">
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-foreground/60">
-            Nikita
-          </p>
-          <h1 className="font-serif text-[clamp(3rem,6vw,4.5rem)] font-semibold leading-tight text-foreground">
-            Hi! I&apos;m Nikita Chetry.
-          </h1>
-          <p className="font-serif text-[clamp(1.4rem,3vw,2.1rem)] italic text-foreground/40">
-            A professional Artist designer based in India.
-          </p>
+    <section className="relative overflow-visible bg-background pt-24">
+      <div className="mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-6xl flex-col justify-center gap-8 px-4 py-12 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+        {/* Hover Image - Follows Mouse */}
+        <div
+          className={`fixed z-30 transition-opacity duration-300 ease-in-out ${
+            isHovering
+              ? 'opacity-100 pointer-events-auto'
+              : 'opacity-0 pointer-events-none'
+          }`}
+          style={{
+            left: `${mousePosition.x}px`,
+            top: `${mousePosition.y}px`,
+            transform: 'translate(-50%, -50%)',
+            width: 'clamp(200px, 30vw, 300px)',
+            height: 'clamp(250px, 38vw, 380px)',
+          }}
+        >
+          <Image
+            src="/pp.jpg"
+            alt="Nikita Chetry"
+            fill
+            className="object-cover rounded-lg shadow-2xl"
+            priority
+          />
+        </div>
+        <div className="max-w-xl space-y-6 text-center lg:text-left">
+          <div className="relative">
+            <h1
+              className="relative z-20 font-serif text-[clamp(3rem,6vw,4.5rem)] font-semibold leading-tight text-foreground cursor-pointer transition-opacity duration-300"
+              onMouseEnter={(e) => {
+                setMousePosition({ x: e.clientX, y: e.clientY });
+                setIsHovering(true);
+              }}
+              onMouseLeave={() => setIsHovering(false)}
+              onMouseMove={(e) => {
+                if (isHovering) {
+                  setMousePosition({ x: e.clientX, y: e.clientY });
+                }
+              }}
+            >
+              Hi! I&apos;m Nikita Chetry.
+            </h1>
+          </div>
+          <div className="space-y-3 font-serif text-[clamp(1.30rem,2vw,1.00rem)] italic leading-relaxed text-foreground/40">
+            <p>
+              A realistic artist who loves creating pencil sketches, canvas paintings,
+              and customized outfit designs.
+            </p>
+            <p>
+              I take art commissions and bring emotions to life through detailed artwork.
+            </p>
+            <p>
+              My work is inspired by real moments and creative imagination.
+            </p>
+          </div>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
             <Link
               href="/contact"
@@ -32,7 +96,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="grid w-full max-w-sm gap-10 text-center sm:max-w-md lg:max-w-xs lg:text-right">
+        <div className="grid w-full max-w-sm gap-8 text-center sm:max-w-md lg:max-w-xs lg:text-right">
           {stats.map((stat) => (
             <div key={stat.label} className="space-y-1">
               <p className="font-serif text-[clamp(2.25rem,4.8vw,3.75rem)] font-semibold text-foreground">

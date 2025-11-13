@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 
-interface Service {
+interface Skill {
   number: string;
   title: string;
   description: string;
@@ -12,103 +12,108 @@ interface Service {
 
 const iconClasses = 'h-9 w-9 text-foreground/35';
 
-const services: Service[] = [
+const skills: Skill[] = [
   {
     number: '01.',
-    title: 'UI & UX Design',
+    title: 'Art',
     description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. It has been the industry's standard dummy text ever since the 1500s.",
+      "My lifelong passion. I express emotions through various mediums, creating pieces that resonate with people's hearts.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className={iconClasses}>
-        <path d="M21 3c-8 0-14 6-14 14v4h4c8 0 14-6 14-14V3h-4z" />
-        <path d="M11 17c0-6 4-10 10-10" />
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+        <circle cx="12" cy="12" r="2" />
       </svg>
     ),
   },
   {
     number: '02.',
-    title: 'Social Marketing',
+    title: 'Sketching',
     description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. It has been the industry's standard dummy text ever since the 1500s.",
+      "I capture moments and emotions with just a pencil, bringing subjects to life through detailed sketches.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className={iconClasses}>
-        <path d="M3 11h4l8-8v18l-8-8H3v-2z" />
-        <circle cx="18" cy="6" r="1" />
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
       </svg>
     ),
   },
   {
     number: '03.',
-    title: 'Branding',
+    title: 'Canvas Painting',
     description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. It has been the industry's standard dummy text ever since the 1500s.",
+      "I explore colors and textures on canvas, where each brushstroke tells a story and brings my creative visions to life.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className={iconClasses}>
-        <path d="M12 3l8 4v6c0 5-4 8-8 8s-8-3-8-8V7l8-4z" />
-        <circle cx="12" cy="11" r="3" />
+        <rect x="2" y="2" width="20" height="20" rx="2" />
+        <path d="M6 6h12M6 12h12M6 18h8" />
       </svg>
     ),
   },
   {
     number: '04.',
-    title: 'Graphic Design',
+    title: 'Custom Design',
     description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. It has been the industry's standard dummy text ever since the 1500s.",
+      "I create unique outfit designs tailored to each person's personality, capturing their individual essence and style.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className={iconClasses}>
-        <path d="M12 2l4 4-4 4-4-4 4-4z" />
-        <path d="M6 12l4 4-4 4-4-4 4-4zM18 12l4 4-4 4-4-4 4-4z" />
-        <path d="M12 10l4 4-4 4-4-4 4-4z" />
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+        <path d="M7 2v20M17 2v20" />
       </svg>
     ),
   },
   {
     number: '05.',
-    title: 'Copywriting',
+    title: 'Creativity',
     description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. It has been the industry's standard dummy text ever since the 1500s.",
+      "I draw inspiration from real moments and everyday life, transforming ordinary experiences into extraordinary artistic expressions.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className={iconClasses}>
-        <path d="M4 20h16" />
-        <path d="M11 4l7 7-7 7H4v-7l7-7z" />
-        <path d="M13 6l5 5" />
+        <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.07 4.93l-2.83 2.83M6.76 17.24l-2.83 2.83M4.93 19.07l2.83-2.83M17.24 6.76l2.83-2.83" />
       </svg>
     ),
   },
   {
     number: '06.',
-    title: 'Consulting',
+    title: 'Visual Storytelling',
     description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. It has been the industry's standard dummy text ever since the 1500s.",
+      "I tell stories through my artwork, connecting with people emotionally and capturing feelings that words cannot express.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className={iconClasses}>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 3" />
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M3 9h18M9 3v18" />
+        <circle cx="7" cy="7" r="1" />
+        <circle cx="17" cy="7" r="1" />
+        <circle cx="7" cy="17" r="1" />
+        <circle cx="17" cy="17" r="1" />
       </svg>
     ),
   },
 ];
 
 export default function Services() {
-  const items = useMemo(() => services, []);
+  const items = useMemo(() => skills, []);
 
   return (
-    <section className="bg-background py-24">
-      <div className="mx-auto w-full max-w-6xl space-y-16 px-4 sm:px-6">
-        <div className="grid gap-12 md:grid-cols-2 xl:grid-cols-3">
-          {items.map((service) => (
-            <div key={service.title} className="space-y-6 text-center md:text-left">
+    <section className="bg-background py-16">
+      <div className="mx-auto w-full max-w-6xl space-y-12 px-4 sm:px-6">
+        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {items.map((skill) => (
+            <div key={skill.title} className="space-y-4 text-center md:text-left">
               <span className="block text-xs font-semibold uppercase tracking-[0.35em] text-foreground/40">
-                {service.number}
+                {skill.number}
               </span>
               <div className="flex items-center justify-center gap-4 text-foreground/30 md:justify-start">
-                {service.icon}
+                {skill.icon}
                 <span className="font-serif text-2xl italic text-foreground/40 md:text-3xl">
-                  {service.title}
+                  {skill.title}
                 </span>
               </div>
               <p className="text-base leading-relaxed text-foreground/60">
-                {service.description}
+                {skill.description}
               </p>
             </div>
           ))}

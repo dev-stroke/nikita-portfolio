@@ -10,7 +10,7 @@ const openSans = Open_Sans({
 
 export const metadata: Metadata = {
   title: "Nikita Chetry Portfolio",
-  description: "A professional UI & UX designer based in Mongolia",
+  description: "A realistic artist who loves creating pencil sketches, canvas paintings, and customized outfit designs.",
 };
 
 export default function RootLayout({

@@ -44,9 +44,9 @@ const experience = [
 
 function TimelineColumn({ heading, items }: { heading: string; items: typeof education }) {
   return (
-    <div className="space-y-8 text-center md:text-left">
+    <div className="space-y-6 text-center md:text-left">
       <h2 className="font-serif text-[clamp(2.25rem,4vw,3rem)] text-foreground">{heading}</h2>
-      <div className="space-y-8">
+      <div className="space-y-6">
         {items.map((item) => (
           <div key={item.title} className="relative overflow-hidden border border-foreground/20 bg-background/70 px-6 py-8 shadow-sm sm:px-8">
             <span className="block text-xs font-semibold uppercase tracking-[0.35em] text-foreground/45">
@@ -67,9 +67,9 @@ function TimelineColumn({ heading, items }: { heading: string; items: typeof edu
 
 export default function EducationExperience() {
   return (
-    <section className="bg-background py-24">
-      <div className="mx-auto w-full max-w-6xl space-y-12 px-4 sm:px-6">
-        <div className="grid gap-12 md:grid-cols-2 md:gap-16">
+    <section className="bg-background py-16">
+      <div className="mx-auto w-full max-w-6xl space-y-8 px-4 sm:px-6">
+        <div className="grid gap-8 md:grid-cols-2 md:gap-12">
           <TimelineColumn heading="Education" items={education} />
           <TimelineColumn heading="Experience" items={experience} />
         </div>
