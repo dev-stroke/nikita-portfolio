@@ -5,11 +5,11 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { getAllProjects, type Project } from '@/lib/projects';
 
-function ShowcaseCard({ project, index }: { project: Project; index: number }) {
+function ShowcaseCard({ project, index, onImageClick }: { project: Project; index: number; onImageClick: (image: string, title: string) => void }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLAnchorElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -35,7 +35,7 @@ function ShowcaseCard({ project, index }: { project: Project; index: number }) {
     };
   }, []);
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setPosition({
       x: event.clientX - rect.left,
@@ -50,18 +50,16 @@ function ShowcaseCard({ project, index }: { project: Project; index: number }) {
     : { background: 'transparent' };
 
   return (
-    <Link
+    <div
       ref={ref}
-      href={`/portfolio/${project.slug}`}
-      className={`group relative overflow-hidden border border-foreground/10 bg-background/60 shadow-lg transition-all duration-700 hover:-translate-y-1 hover:shadow-xl focus-visible:-translate-y-1 focus-visible:shadow-xl ${
+      className={`group relative overflow-hidden border border-foreground/10 bg-background/60 shadow-lg transition-all duration-700 hover:-translate-y-1 hover:shadow-xl cursor-pointer ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      onFocus={() => setIsHovering(true)}
-      onBlur={() => setIsHovering(false)}
+      onClick={() => project.image && onImageClick(project.image, project.title)}
     >
       {project.image && (
         <div className="relative h-[320px] w-full sm:h-[360px]">
@@ -69,54 +67,128 @@ function ShowcaseCard({ project, index }: { project: Project; index: number }) {
             src={project.image}
             alt={project.title}
             fill
-            className="object-cover transition duration-500 group-hover:scale-105 group-focus-visible:scale-105"
+            className="object-cover transition duration-500 group-hover:scale-105"
           />
         </div>
       )}
       <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+        className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
         style={overlayStyle}
       />
       {project.title ? (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition duration-300 group-hover:opacity-100">
           <span className="rounded-xl bg-white/80 px-6 py-4 font-serif text-xl text-foreground shadow-lg">
             {project.title}
           </span>
         </div>
       ) : null}
-    </Link>
+    </div>
   );
 }
 
 export default function Showcase() {
   const projects = getAllProjects().slice(0, 4);
+  const [zoomedImage, setZoomedImage] = useState<{ src: string; title: string } | null>(null);
+
+  useEffect(() => {
+    // Close modal on Escape key
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setZoomedImage(null);
+      }
+    };
+
+    if (zoomedImage) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [zoomedImage]);
+
+  const handleImageClick = (image: string, title: string) => {
+    setZoomedImage({ src: image, title });
+  };
+
+  const closeZoom = () => {
+    setZoomedImage(null);
+  };
 
   return (
-    <section className="bg-background py-16">
-      <div className="mx-auto w-full max-w-6xl space-y-8 px-4 sm:px-6">
-        <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-foreground/60">
-              Portfolio
-            </p>
-            <h2 className="mt-2 font-serif text-[clamp(2.5rem,4vw,3.5rem)] text-foreground">
-              Selected Work
-            </h2>
+    <>
+      <section className="bg-background py-16">
+        <div className="mx-auto w-full max-w-6xl space-y-8 px-4 sm:px-6">
+          <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-foreground/60">
+                Portfolio
+              </p>
+              <h2 className="mt-2 font-serif text-[clamp(2.5rem,4vw,3.5rem)] text-foreground">
+                Selected Work
+              </h2>
+            </div>
+            <Link
+              href="/portfolio"
+              className="inline-flex items-center rounded-full border border-foreground/20 px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-foreground transition-colors hover:bg-foreground hover:text-background"
+            >
+              View All Works
+            </Link>
           </div>
-          <Link
-            href="/portfolio"
-            className="inline-flex items-center rounded-full border border-foreground/20 px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-foreground transition-colors hover:bg-foreground hover:text-background"
-          >
-            View All Works
-          </Link>
-        </div>
 
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-          {projects.map((project, index) => (
-            <ShowcaseCard key={project.slug} project={project} index={index} />
-          ))}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            {projects.map((project, index) => (
+              <ShowcaseCard key={project.slug} project={project} index={index} onImageClick={handleImageClick} />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Zoom Modal */}
+      {zoomedImage && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 backdrop-blur-sm p-4 py-16 sm:py-4 animate-in fade-in duration-300 overflow-y-auto"
+          onClick={closeZoom}
+        >
+          <button
+            onClick={closeZoom}
+            className="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20"
+            aria-label="Close zoom"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div
+            className="relative flex flex-col items-center max-w-[90vw] w-full animate-in zoom-in-95 duration-300 my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative w-full flex-shrink-0">
+              <Image
+                src={zoomedImage.src}
+                alt={zoomedImage.title}
+                width={1200}
+                height={800}
+                className="max-h-[calc(90vh-80px)] sm:max-h-[calc(90vh-100px)] w-auto max-w-full mx-auto object-contain rounded-lg"
+                priority
+              />
+            </div>
+            {zoomedImage.title && (
+              <p className="mt-4 sm:mt-6 text-center font-serif text-base sm:text-xl text-white px-4 break-words">
+                {zoomedImage.title}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

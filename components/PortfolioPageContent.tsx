@@ -1,17 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-import { getProjectsByCategory, type Project } from '@/lib/projects';
+import { getAllProjects, type Project } from '@/lib/projects';
 
-type Filter = 'all' | 'Graphic' | 'Creative';
-
-function PortfolioCard({ project }: { project: Project }) {
+function PortfolioCard({ project, onImageClick }: { project: Project; onImageClick: (image: string, title: string) => void }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setPosition({
       x: event.clientX - rect.left,
@@ -26,14 +23,12 @@ function PortfolioCard({ project }: { project: Project }) {
     : { background: 'transparent' };
 
   return (
-    <Link
-      href={`/portfolio/${project.slug}`}
-      className="group relative block overflow-hidden border border-foreground/10 bg-background/70 shadow-lg transition duration-500 hover:-translate-y-1 hover:shadow-xl"
+    <div
+      className="group relative block overflow-hidden border border-foreground/10 bg-background/70 shadow-lg transition duration-500 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      onFocus={() => setIsHovering(true)}
-      onBlur={() => setIsHovering(false)}
+      onClick={() => project.image && onImageClick(project.image, project.title)}
     >
       {project.image && (
         <Image
@@ -55,18 +50,16 @@ function PortfolioCard({ project }: { project: Project }) {
           </span>
         </div>
       ) : null}
-    </Link>
+    </div>
   );
 }
 
 export default function PortfolioPageContent() {
-  const [activeFilter, setActiveFilter] = useState<Filter>('all');
-  const filteredProjects = getProjectsByCategory(activeFilter === 'all' ? null : activeFilter);
-
-  const filters: Filter[] = ['all', 'Graphic', 'Creative'];
+  const projects = getAllProjects();
+  const [zoomedImage, setZoomedImage] = useState<{ src: string; title: string } | null>(null);
 
   useEffect(() => {
-    // Trigger re-animation when filter changes
+    // Trigger animation on mount
     const cards = document.querySelectorAll('[data-portfolio-card]');
     cards.forEach((card, index) => {
       (card as HTMLElement).style.animation = 'none';
@@ -75,51 +68,108 @@ export default function PortfolioPageContent() {
         (card as HTMLElement).style.animationDelay = `${index * 100}ms`;
       }, 10);
     });
-  }, [activeFilter]);
+  }, []);
+
+  useEffect(() => {
+    // Close modal on Escape key
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setZoomedImage(null);
+      }
+    };
+
+    if (zoomedImage) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [zoomedImage]);
+
+  const handleImageClick = (image: string, title: string) => {
+    setZoomedImage({ src: image, title });
+  };
+
+  const closeZoom = () => {
+    setZoomedImage(null);
+  };
 
   return (
-    <div className="min-h-screen bg-background py-16">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <div className="mb-8 text-center">
-          <h1 className="font-serif text-[clamp(3rem,5vw,4.5rem)] text-foreground">
-            My Latest Works
-          </h1>
-        </div>
+    <>
+      <div className="min-h-screen bg-background py-16">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+          <div className="mb-8 text-center">
+            <h1 className="font-serif text-[clamp(3rem,5vw,4.5rem)] text-foreground">
+              My Latest Works
+            </h1>
+          </div>
 
-        <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] transition-all duration-300 ${
-                activeFilter === filter
-                  ? 'bg-foreground text-background scale-105'
-                  : 'border border-dashed border-foreground/30 bg-background text-foreground hover:border-foreground/50 hover:scale-105'
-              }`}
-            >
-              {filter === 'all' ? 'Show All' : filter}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
-          {filteredProjects.map((project, index) => (
-            <div
-              key={project.slug}
-              data-portfolio-card
-              className="transition-all duration-700"
-              style={{
-                animation: 'fadeInUp 0.6s ease-out forwards',
-                animationDelay: `${index * 100}ms`,
-                opacity: 0,
-              }}
-            >
-              <PortfolioCard project={project} />
-            </div>
-          ))}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+            {projects.map((project, index) => (
+              <div
+                key={project.slug}
+                data-portfolio-card
+                className="transition-all duration-700"
+                style={{
+                  animation: 'fadeInUp 0.6s ease-out forwards',
+                  animationDelay: `${index * 100}ms`,
+                  opacity: 0,
+                }}
+              >
+                <PortfolioCard project={project} onImageClick={handleImageClick} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Zoom Modal */}
+      {zoomedImage && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 backdrop-blur-sm p-4 py-16 sm:py-4 animate-in fade-in duration-300 overflow-y-auto"
+          onClick={closeZoom}
+        >
+          <button
+            onClick={closeZoom}
+            className="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20"
+            aria-label="Close zoom"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div
+            className="relative flex flex-col items-center max-w-[90vw] w-full animate-in zoom-in-95 duration-300 my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative w-full flex-shrink-0">
+              <Image
+                src={zoomedImage.src}
+                alt={zoomedImage.title}
+                width={1200}
+                height={800}
+                className="max-h-[calc(90vh-80px)] sm:max-h-[calc(90vh-100px)] w-auto max-w-full mx-auto object-contain rounded-lg"
+                priority
+              />
+            </div>
+            {zoomedImage.title && (
+              <p className="mt-4 sm:mt-6 text-center font-serif text-base sm:text-xl text-white px-4 break-words">
+                {zoomedImage.title}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
