@@ -9,7 +9,7 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Nikita Chetry Portfolio",
+  title: "Nikita Chetry",
   description: "A realistic artist who loves creating pencil sketches, canvas paintings, and customized outfit designs.",
 };
 

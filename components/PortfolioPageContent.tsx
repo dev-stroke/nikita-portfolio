@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getProjectsByCategory, type Project } from '@/lib/projects';
@@ -65,6 +65,18 @@ export default function PortfolioPageContent() {
 
   const filters: Filter[] = ['all', 'Graphic', 'Creative'];
 
+  useEffect(() => {
+    // Trigger re-animation when filter changes
+    const cards = document.querySelectorAll('[data-portfolio-card]');
+    cards.forEach((card, index) => {
+      (card as HTMLElement).style.animation = 'none';
+      setTimeout(() => {
+        (card as HTMLElement).style.animation = `fadeInUp 0.6s ease-out forwards`;
+        (card as HTMLElement).style.animationDelay = `${index * 100}ms`;
+      }, 10);
+    });
+  }, [activeFilter]);
+
   return (
     <div className="min-h-screen bg-background py-16">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
@@ -79,10 +91,10 @@ export default function PortfolioPageContent() {
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] transition-colors ${
+              className={`rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] transition-all duration-300 ${
                 activeFilter === filter
-                  ? 'bg-foreground text-background'
-                  : 'border border-dashed border-foreground/30 bg-background text-foreground hover:border-foreground/50'
+                  ? 'bg-foreground text-background scale-105'
+                  : 'border border-dashed border-foreground/30 bg-background text-foreground hover:border-foreground/50 hover:scale-105'
               }`}
             >
               {filter === 'all' ? 'Show All' : filter}
@@ -91,8 +103,19 @@ export default function PortfolioPageContent() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
-          {filteredProjects.map((project) => (
-            <PortfolioCard key={project.slug} project={project} />
+          {filteredProjects.map((project, index) => (
+            <div
+              key={project.slug}
+              data-portfolio-card
+              className="transition-all duration-700"
+              style={{
+                animation: 'fadeInUp 0.6s ease-out forwards',
+                animationDelay: `${index * 100}ms`,
+                opacity: 0,
+              }}
+            >
+              <PortfolioCard project={project} />
+            </div>
           ))}
         </div>
       </div>

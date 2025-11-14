@@ -2,17 +2,73 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const stats = [
-  { value: '20,000+', label: 'Hours of Experience' },
-  { value: '100+', label: 'Projects Done' },
-  { value: '4,000+', label: 'Happy Clients' },
+  { value: 20000, suffix: '+', label: 'Hours of Experience' },
+  { value: 100, suffix: '+', label: 'Projects Done' },
+  { value: 4000, suffix: '+', label: 'Happy Clients' },
 ];
+
+function AnimatedStat({ value, suffix, label }: { value: number; suffix: string; label: string }) {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            const duration = 2000;
+            const steps = 60;
+            const increment = value / steps;
+            let current = 0;
+
+            const timer = setInterval(() => {
+              current += increment;
+              if (current >= value) {
+                setCount(value);
+                clearInterval(timer);
+              } else {
+                setCount(Math.floor(current));
+              }
+            }, duration / steps);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [value, hasAnimated]);
+
+  return (
+    <div ref={ref} className="space-y-1">
+      <p className="font-serif text-[clamp(2.25rem,4.8vw,3.75rem)] font-semibold text-foreground">
+        {count.toLocaleString()}{suffix}
+      </p>
+      <p className="text-sm font-medium text-foreground/50 sm:text-base">
+        {label}
+      </p>
+    </div>
+  );
+}
 
 export default function Hero() {
   const [isHovering, setIsHovering] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isVisible] = useState(true);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -56,7 +112,9 @@ export default function Hero() {
             priority
           />
         </div>
-        <div className="max-w-xl space-y-6 text-center lg:text-left">
+        <div className={`max-w-xl space-y-6 text-center lg:text-left transition-all duration-1000 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <div className="relative">
             <h1
               className="relative z-20 font-serif text-[clamp(3rem,6vw,4.5rem)] font-semibold leading-tight text-foreground cursor-pointer transition-opacity duration-300"
@@ -74,7 +132,9 @@ export default function Hero() {
               Hi! I&apos;m Nikita Chetry.
             </h1>
           </div>
-          <div className="space-y-3 font-serif text-[clamp(1.30rem,2vw,1.00rem)] italic leading-relaxed text-foreground/40">
+          <div className={`space-y-3 font-serif text-[clamp(1.30rem,2vw,1.00rem)] italic leading-relaxed text-foreground/40 transition-all duration-1000 delay-200 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}>
             <p>
               A realistic artist who loves creating pencil sketches, canvas paintings,
               and customized outfit designs.
@@ -86,26 +146,23 @@ export default function Hero() {
               My work is inspired by real moments and creative imagination.
             </p>
           </div>
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
+          <div className={`flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start transition-all duration-1000 delay-300 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}>
             <Link
               href="/contact"
-              className="inline-flex items-center rounded-full border border-dashed border-foreground px-10 py-4 font-semibold tracking-[0.2em] text-foreground transition-colors duration-200 hover:bg-foreground hover:text-background"
+              className="inline-flex items-center rounded-full border border-dashed border-foreground px-10 py-4 font-semibold tracking-[0.2em] text-foreground transition-all duration-300 hover:bg-foreground hover:text-background hover:scale-105"
             >
               Let&apos;s Talk
             </Link>
           </div>
         </div>
 
-        <div className="grid w-full max-w-sm gap-8 text-center sm:max-w-md lg:max-w-xs lg:text-right">
+        <div className={`grid w-full max-w-sm gap-8 text-center sm:max-w-md lg:max-w-xs lg:text-right transition-all duration-1000 delay-500 ${
+          isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+        }`}>
           {stats.map((stat) => (
-            <div key={stat.label} className="space-y-1">
-              <p className="font-serif text-[clamp(2.25rem,4.8vw,3.75rem)] font-semibold text-foreground">
-                {stat.value}
-              </p>
-              <p className="text-sm font-medium text-foreground/50 sm:text-base">
-                {stat.label}
-              </p>
-            </div>
+            <AnimatedStat key={stat.label} value={stat.value} suffix={stat.suffix} label={stat.label} />
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
 interface Skill {
@@ -94,6 +94,60 @@ const skills: Skill[] = [
   },
 ];
 
+function SkillCard({ skill, index }: { skill: Skill; index: number }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`space-y-4 text-center md:text-left transition-all duration-700 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+      style={{ transitionDelay: `${index * 100}ms` }}
+    >
+      <span className="block text-xs font-semibold uppercase tracking-[0.35em] text-foreground/40">
+        {skill.number}
+      </span>
+      <div className="flex items-center justify-center gap-4 text-foreground/30 md:justify-start group">
+        <div className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+          {skill.icon}
+        </div>
+        <span className="font-serif text-2xl italic text-foreground/40 md:text-3xl transition-colors duration-300 group-hover:text-foreground/60">
+          {skill.title}
+        </span>
+      </div>
+      <p className="text-base leading-relaxed text-foreground/60">
+        {skill.description}
+      </p>
+    </div>
+  );
+}
+
 export default function Services() {
   const items = useMemo(() => skills, []);
 
@@ -101,21 +155,8 @@ export default function Services() {
     <section className="bg-background py-16">
       <div className="mx-auto w-full max-w-6xl space-y-12 px-4 sm:px-6">
         <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-          {items.map((skill) => (
-            <div key={skill.title} className="space-y-4 text-center md:text-left">
-              <span className="block text-xs font-semibold uppercase tracking-[0.35em] text-foreground/40">
-                {skill.number}
-              </span>
-              <div className="flex items-center justify-center gap-4 text-foreground/30 md:justify-start">
-                {skill.icon}
-                <span className="font-serif text-2xl italic text-foreground/40 md:text-3xl">
-                  {skill.title}
-                </span>
-              </div>
-              <p className="text-base leading-relaxed text-foreground/60">
-                {skill.description}
-              </p>
-            </div>
+          {items.map((skill, index) => (
+            <SkillCard key={skill.title} skill={skill} index={index} />
           ))}
         </div>
       </div>

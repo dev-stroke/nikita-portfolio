@@ -6,7 +6,7 @@ export default function Footer() {
           Stay kind. Stay curious.
         </p>
         <p className="text-xs text-foreground/50">
-          © 2025 Kunal Das
+          Crafted by Kunal Das
         </p>
       </div>
     </footer>

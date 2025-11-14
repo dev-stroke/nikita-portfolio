@@ -2,12 +2,38 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getAllProjects, type Project } from '@/lib/projects';
 
-function ShowcaseCard({ project }: { project: Project }) {
+function ShowcaseCard({ project, index }: { project: Project; index: number }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -25,8 +51,12 @@ function ShowcaseCard({ project }: { project: Project }) {
 
   return (
     <Link
+      ref={ref}
       href={`/portfolio/${project.slug}`}
-      className="group relative overflow-hidden border border-foreground/10 bg-background/60 shadow-lg transition duration-500 hover:-translate-y-1 hover:shadow-xl focus-visible:-translate-y-1 focus-visible:shadow-xl"
+      className={`group relative overflow-hidden border border-foreground/10 bg-background/60 shadow-lg transition-all duration-700 hover:-translate-y-1 hover:shadow-xl focus-visible:-translate-y-1 focus-visible:shadow-xl ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      }`}
+      style={{ transitionDelay: `${index * 100}ms` }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
@@ -82,8 +112,8 @@ export default function Showcase() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-          {projects.map((project) => (
-            <ShowcaseCard key={project.slug} project={project} />
+          {projects.map((project, index) => (
+            <ShowcaseCard key={project.slug} project={project} index={index} />
           ))}
         </div>
       </div>

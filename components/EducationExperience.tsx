@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
+
 const education = [
   {
     years: 'Higher Secondary',
@@ -25,13 +27,55 @@ const experience = [
   },
 ];
 
-function TimelineColumn({ heading, items }: { heading: string; items: typeof education }) {
+function TimelineColumn({ heading, items, columnIndex }: { heading: string; items: typeof education; columnIndex: number }) {
   return (
     <div className="space-y-6 text-center md:text-left">
-      <h2 className="font-serif text-[clamp(2.25rem,4vw,3rem)] text-foreground">{heading}</h2>
+      <h2 className="font-serif text-[clamp(2.25rem,4vw,3rem)] text-foreground animate-fade-in">{heading}</h2>
       <div className="space-y-6">
-        {items.map((item) => (
-          <div key={item.title} className="group relative overflow-hidden border border-foreground/20 bg-background/70 px-6 py-8 shadow-sm transition-all duration-300 hover:border-foreground/30 hover:shadow-md sm:px-8">
+        {items.map((item, index) => (
+          <TimelineCard key={item.title} item={item} index={index} columnIndex={columnIndex} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TimelineCard({ item, index, columnIndex }: { item: typeof education[0]; index: number; columnIndex: number }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`group relative overflow-hidden border border-foreground/20 bg-background/70 px-6 py-8 shadow-sm transition-all duration-500 hover:border-foreground/30 hover:shadow-md sm:px-8 ${
+        isVisible ? 'opacity-100 translate-x-0' : `opacity-0 ${columnIndex === 0 ? '-translate-x-8' : 'translate-x-8'}`
+      }`}
+      style={{ transitionDelay: `${index * 150}ms` }}
+    >
             <span className="block text-xs font-semibold uppercase tracking-[0.35em] text-foreground/45">
               {item.years}
             </span>
@@ -52,9 +96,6 @@ function TimelineColumn({ heading, items }: { heading: string; items: typeof edu
             </div>
             <div className="absolute inset-x-0 top-0 h-px bg-foreground/10" />
             <div className="absolute inset-x-0 bottom-0 h-px bg-foreground/10" />
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
@@ -64,8 +105,8 @@ export default function EducationExperience() {
     <section className="bg-background py-16">
       <div className="mx-auto w-full max-w-6xl space-y-8 px-4 sm:px-6">
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-          <TimelineColumn heading="Education" items={education} />
-          <TimelineColumn heading="Experience" items={experience} />
+          <TimelineColumn heading="Education" items={education} columnIndex={0} />
+          <TimelineColumn heading="Experience" items={experience} columnIndex={1} />
         </div>
       </div>
     </section>
