@@ -44,7 +44,7 @@ export default function ContactBanner() {
             Let&apos;s collaborate
           </p>
           <h2 className="mt-6 font-serif text-[clamp(1.25rem,5vw,3.5rem)] text-foreground">
-            strokenikta@gmail.com
+            strokenikita@gmail.com
           </h2>
           <p className="mt-4 text-base leading-relaxed text-foreground/60 italic">
             Let&apos;s create something beautiful together. Whether it&apos;s bringing your vision to life through art,

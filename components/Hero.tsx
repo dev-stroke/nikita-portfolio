@@ -128,6 +128,19 @@ export default function Hero() {
                   setMousePosition({ x: e.clientX, y: e.clientY });
                 }
               }}
+              onTouchStart={(e) => {
+                const touch = e.touches[0];
+                setMousePosition({ x: touch.clientX, y: touch.clientY });
+                setIsHovering(true);
+              }}
+              onTouchEnd={() => setIsHovering(false)}
+              onTouchCancel={() => setIsHovering(false)}
+              onTouchMove={(e) => {
+                if (isHovering) {
+                  const touch = e.touches[0];
+                  setMousePosition({ x: touch.clientX, y: touch.clientY });
+                }
+              }}
             >
               Hi! I&apos;m Nikita Chetry.
             </h1>
