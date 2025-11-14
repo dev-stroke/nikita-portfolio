@@ -13,7 +13,7 @@ const navLinks = [
 
 const socialLinks = [
   {
-    href: '#',
+    href: 'https://www.instagram.com/n.k.chhetri?igsh=MTF6YXp3b2ZjODYxeg==',
     label: 'Instagram',
     icon: (
       <svg
@@ -33,44 +33,6 @@ const socialLinks = [
           strokeWidth="1.5"
         />
         <circle cx="17" cy="7" r="1" fill="currentColor" />
-      </svg>
-    ),
-  },
-  {
-    href: '#',
-    label: 'LinkedIn',
-    icon: (
-      <svg
-        className="h-4 w-4"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M6.94 6.94a1.88 1.88 0 1 1 0-3.76 1.88 1.88 0 0 1 0 3.76z"
-          fill="currentColor"
-        />
-        <path
-          d="M4.5 9h4.88v9.75H4.5zM14.5 9a4 4 0 0 1 4 4v5.75h-4.82V13.2c0-1.09-.73-1.82-1.71-1.82s-1.82.73-1.82 1.82v5.55H6.94V9H11v1.36c.73-.95 1.82-1.36 3.45-1.36z"
-          fill="currentColor"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: '#',
-    label: 'Facebook',
-    icon: (
-      <svg
-        className="h-4 w-4"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M14.5 9h3V5.5h-3c-2.48 0-4 1.52-4 4v1.5H8V15h2.5v7h4.5v-7h3l.5-4.5h-3v-1c0-.9.3-1.5 1.5-1.5z"
-          fill="currentColor"
-        />
       </svg>
     ),
   },
@@ -121,6 +83,8 @@ export default function Header() {
               <Link
                 key={link.label}
                 href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={link.label}
                 className="rounded-full border border-foreground/10 p-2 transition-colors hover:border-foreground/40 hover:text-foreground"
               >
@@ -161,6 +125,8 @@ export default function Header() {
               <Link
                 key={link.label}
                 href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={link.label}
                 className="rounded-full border border-foreground/10 p-2 transition-colors hover:border-foreground/40 hover:text-foreground"
               >
