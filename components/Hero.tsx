@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 const stats = [
   { value: 20000, suffix: '+', label: 'Hours of Experience' },
   { value: 100, suffix: '+', label: 'Projects Done' },
-  { value: 4000, suffix: '+', label: 'Happy Clients' },
+  { value: 1000, suffix: '+', label: 'Happy Clients' },
 ];
 
 function AnimatedStat({ value, suffix, label }: { value: number; suffix: string; label: string }) {
