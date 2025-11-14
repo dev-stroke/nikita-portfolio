@@ -31,3 +31,37 @@ body {
 .font-serif {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
+
+/* Marquee animation for ClientsStrip */
+.marquee-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* Hide scrollbar */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.marquee-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  animation: marquee 30s linear infinite;
+  width: fit-content;
+}
+
+.marquee-container:hover .marquee-content {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}

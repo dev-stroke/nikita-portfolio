@@ -1,74 +1,92 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
-
-const clients = [
-  { name: 'Logoplsum', logo: '/images/logos/logo-1.svg' },
-  { name: 'Logomark', logo: '/images/logos/logo-2.svg' },
-  { name: 'Logostudio', logo: '/images/logos/logo-3.svg' },
-  { name: 'Logobase', logo: '/images/logos/logo-4.svg' },
-  { name: 'Logofolio', logo: '/images/logos/logo-5.svg' },
-  { name: 'Logoscape', logo: '/images/logos/logo-6.svg' },
+const skills = [
+  {
+    name: 'Art',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+        <circle cx="12" cy="12" r="2" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Sketching',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Canvas Painting',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
+        <rect x="2" y="2" width="20" height="20" rx="2" />
+        <path d="M6 6h12M6 12h12M6 18h8" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Custom Design',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+        <path d="M7 2v20M17 2v20" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Creativity',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
+        <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.07 4.93l-2.83 2.83M6.76 17.24l-2.83 2.83M4.93 19.07l2.83-2.83M17.24 6.76l2.83-2.83" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Visual Storytelling',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M3 9h18M9 3v18" />
+        <circle cx="7" cy="7" r="1" />
+        <circle cx="17" cy="7" r="1" />
+        <circle cx="7" cy="17" r="1" />
+        <circle cx="17" cy="17" r="1" />
+      </svg>
+    ),
+  },
 ];
 
 export default function ClientsStrip() {
-  const [startIndex, setStartIndex] = useState(0);
-  const visibleClients = clients.slice(startIndex, startIndex + 5);
-
-  const handlePrev = () => {
-    setStartIndex((prev) => (prev === 0 ? clients.length - 5 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setStartIndex((prev) => (prev >= clients.length - 5 ? 0 : prev + 1));
-  };
+  // Duplicate skills for seamless infinite scroll
+  const duplicatedSkills = [...skills, ...skills, ...skills];
 
   return (
     <section className="bg-background py-12">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <div className="flex items-center justify-center gap-8 overflow-x-auto md:hidden">
-          {clients.map((client) => (
-            <div key={client.name} className="flex min-w-[90px] flex-col items-center gap-2 text-foreground/50">
-              <div className="relative h-12 w-12">
-                <Image src={client.logo} alt={client.name} fill className="object-contain opacity-80" />
-              </div>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.4em]">
-                {client.name}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="hidden items-center justify-between md:flex">
-          <button
-            type="button"
-            onClick={handlePrev}
-            aria-label="Previous clients"
-            className="flex h-14 w-14 items-center justify-center rounded-full border border-dashed border-foreground/30 text-foreground/60 transition hover:border-foreground hover:text-foreground"
-          >
-            &larr;
-          </button>
-          <div className="flex flex-1 items-center justify-center gap-8 px-6">
-            {visibleClients.map((client) => (
-              <div key={client.name} className="flex flex-col items-center gap-2 text-foreground/50">
-                <div className="relative h-14 w-14">
-                  <Image src={client.logo} alt={client.name} fill className="object-contain opacity-80" />
+        {/* Mobile & Desktop: Infinite auto-scroll marquee */}
+        <div className="overflow-hidden">
+          <div className="marquee-container group">
+            <div className="marquee-content">
+              {duplicatedSkills.map((skill, index) => (
+                <div key={`${skill.name}-${index}`} className="flex flex-col items-center gap-2 text-foreground/50 flex-shrink-0 px-4 md:px-8">
+                  <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center text-foreground/60 transition-all duration-300 hover:scale-110 hover:text-foreground">
+                    {skill.icon}
+                  </div>
+                  <span className="text-[10px] md:text-xs font-semibold uppercase tracking-[0.4em] md:tracking-[0.35em] whitespace-nowrap">
+                    {skill.name}
+                  </span>
                 </div>
-                <span className="text-xs font-semibold uppercase tracking-[0.35em]">
-                  {client.name}
-                </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          <button
-            type="button"
-            onClick={handleNext}
-            aria-label="Next clients"
-            className="flex h-14 w-14 items-center justify-center rounded-full border border-dashed border-foreground/30 text-foreground/60 transition hover:border-foreground hover:text-foreground"
-          >
-            &rarr;
-          </button>
         </div>
       </div>
     </section>
