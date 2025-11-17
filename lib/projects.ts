@@ -196,10 +196,3 @@ export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((project) => project.slug === slug);
 }
 
-export function getProjectsByCategory(category: string | null): Project[] {
-  if (!category || category === 'all') {
-    return projects;
-  }
-  return projects.filter((project) => project.category === category);
-}
-

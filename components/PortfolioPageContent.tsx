@@ -68,7 +68,7 @@ export default function PortfolioPageContent() {
     // Close modal on Escape key
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setZoomedImage(null);
+        setZoomedIndex(null);
       }
     };
 
