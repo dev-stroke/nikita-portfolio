@@ -36,6 +36,20 @@ const socialLinks = [
       </svg>
     ),
   },
+  {
+    href: 'https://youtube.com/@strokestyle?si=cjb4G3mdgi0XUSlb',
+    label: 'YouTube',
+    icon: (
+      <svg
+        className="h-4 w-4"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M21.8 8.001a2.5 2.5 0 0 0-1.76-1.77C18.36 6 12 6 12 6s-6.36 0-8.04.231A2.5 2.5 0 0 0 2.2 8.001 26.6 26.6 0 0 0 2 11.998a26.6 26.6 0 0 0 .2 3.997 2.5 2.5 0 0 0 1.76 1.77C5.64 18 12 18 12 18s6.36 0 8.04-.231a2.5 2.5 0 0 0 1.76-1.77 26.6 26.6 0 0 0 .2-3.997 26.6 26.6 0 0 0-.2-3.001ZM9.75 14.5v-5l5 2.5-5 2.5Z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Header() {
