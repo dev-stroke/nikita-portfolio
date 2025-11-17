@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { getAllProjects, type Project } from '@/lib/projects';
 
-function ShowcaseCard({ project, index, onImageClick }: { project: Project; index: number; onImageClick: (image: string, title: string) => void }) {
+function ShowcaseCard({ project, index, onImageClick }: { project: Project; index: number; onImageClick: (index: number) => void }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -59,7 +59,7 @@ function ShowcaseCard({ project, index, onImageClick }: { project: Project; inde
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      onClick={() => project.image && onImageClick(project.image, project.title)}
+      onClick={() => project.image && onImageClick(index)}
     >
       {project.image && (
         <div className="relative h-[320px] w-full sm:h-[360px]">
@@ -68,6 +68,7 @@ function ShowcaseCard({ project, index, onImageClick }: { project: Project; inde
             alt={project.title}
             fill
             className="object-cover transition duration-500 group-hover:scale-105"
+            unoptimized
           />
         </div>
       )}
@@ -75,30 +76,23 @@ function ShowcaseCard({ project, index, onImageClick }: { project: Project; inde
         className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
         style={overlayStyle}
       />
-      {project.title ? (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition duration-300 group-hover:opacity-100">
-          <span className="rounded-xl bg-white/80 px-6 py-4 font-serif text-xl text-foreground shadow-lg">
-            {project.title}
-          </span>
-        </div>
-      ) : null}
     </div>
   );
 }
 
 export default function Showcase() {
   const projects = getAllProjects().slice(0, 4);
-  const [zoomedImage, setZoomedImage] = useState<{ src: string; title: string } | null>(null);
+  const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     // Close modal on Escape key
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setZoomedImage(null);
+        setZoomedIndex(null);
       }
     };
 
-    if (zoomedImage) {
+    if (zoomedIndex !== null) {
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
     }
@@ -107,14 +101,28 @@ export default function Showcase() {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [zoomedImage]);
+  }, [zoomedIndex]);
 
-  const handleImageClick = (image: string, title: string) => {
-    setZoomedImage({ src: image, title });
+  const handleImageClick = (index: number) => {
+    setZoomedIndex(index);
   };
 
   const closeZoom = () => {
-    setZoomedImage(null);
+    setZoomedIndex(null);
+  };
+
+  const showPrev = () => {
+    if (zoomedIndex === null) return;
+    setZoomedIndex((prev) =>
+      prev === null ? prev : (prev - 1 + projects.length) % projects.length
+    );
+  };
+
+  const showNext = () => {
+    if (zoomedIndex === null) return;
+    setZoomedIndex((prev) =>
+      prev === null ? prev : (prev + 1) % projects.length
+    );
   };
 
   return (
@@ -127,7 +135,7 @@ export default function Showcase() {
                 Portfolio
               </p>
               <h2 className="mt-2 font-serif text-[clamp(2.5rem,4vw,3.5rem)] text-foreground">
-                Selected Work
+                Featured Work
               </h2>
             </div>
             <Link
@@ -147,7 +155,7 @@ export default function Showcase() {
       </section>
 
       {/* Zoom Modal */}
-      {zoomedImage && (
+      {zoomedIndex !== null && projects[zoomedIndex] && (
         <div
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 backdrop-blur-sm p-4 py-16 sm:py-4 animate-in fade-in duration-300 overflow-y-auto"
           onClick={closeZoom}
@@ -173,19 +181,38 @@ export default function Showcase() {
           >
             <div className="relative w-full flex-shrink-0">
               <Image
-                src={zoomedImage.src}
-                alt={zoomedImage.title}
+                src={projects[zoomedIndex].image ?? ''}
+                alt={projects[zoomedIndex].title}
                 width={1200}
                 height={800}
-                className="max-h-[calc(90vh-80px)] sm:max-h-[calc(90vh-100px)] w-auto max-w-full mx-auto object-contain rounded-lg"
+                className="max-h-[90vh] w-auto max-w-full mx-auto object-contain rounded-lg"
                 priority
+                unoptimized
               />
             </div>
-            {zoomedImage.title && (
-              <p className="mt-4 sm:mt-6 text-center font-serif text-base sm:text-xl text-white px-4 break-words">
-                {zoomedImage.title}
-              </p>
-            )}
+            {/* Navigation buttons */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                showPrev();
+              }}
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white hover:bg-black/60 transition-colors"
+              aria-label="Previous image"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                showNext();
+              }}
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white hover:bg-black/60 transition-colors"
+              aria-label="Next image"
+            >
+              ›
+            </button>
           </div>
         </div>
       )}

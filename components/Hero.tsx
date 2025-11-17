@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 
 const stats = [
-  { value: 20000, suffix: '+', label: 'Hours of Experience' },
+  { value: 10000, suffix: '+', label: 'Hours of Experience' },
   { value: 100, suffix: '+', label: 'Projects Done' },
-  { value: 1000, suffix: '+', label: 'Happy Clients' },
+  { value: 500, suffix: '+', label: 'Happy Clients' },
 ];
 
 function AnimatedStat({ value, suffix, label }: { value: number; suffix: string; label: string }) {

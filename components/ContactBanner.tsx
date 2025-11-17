@@ -41,7 +41,7 @@ export default function ContactBanner() {
           }`}
         >
           <p className="text-sm font-semibold uppercase tracking-[0.4em] text-foreground/40">
-            Let&apos;s collaborate
+            Let&apos;s connect!
           </p>
           <h2 className="mt-6 font-serif text-[clamp(1.25rem,5vw,3.5rem)] text-foreground">
             strokenikita@gmail.com

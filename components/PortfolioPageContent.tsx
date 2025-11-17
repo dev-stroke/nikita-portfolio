@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getAllProjects, type Project } from '@/lib/projects';
 
-function PortfolioCard({ project, onImageClick }: { project: Project; onImageClick: (image: string, title: string) => void }) {
+function PortfolioCard({ project, onImageClick }: { project: Project; onImageClick: () => void }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
 
@@ -28,7 +28,7 @@ function PortfolioCard({ project, onImageClick }: { project: Project; onImageCli
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      onClick={() => project.image && onImageClick(project.image, project.title)}
+      onClick={() => project.image && onImageClick()}
     >
       {project.image && (
         <Image
@@ -37,26 +37,20 @@ function PortfolioCard({ project, onImageClick }: { project: Project; onImageCli
           width={800}
           height={520}
           className="h-[400px] w-full object-cover transition duration-700 group-hover:scale-105"
+          unoptimized
         />
       )}
       <div
         className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
         style={overlayStyle}
       />
-      {project.title ? (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition duration-300 group-hover:opacity-100">
-          <span className="rounded-xl bg-white/80 px-6 py-4 font-serif text-xl text-foreground shadow-lg">
-            {project.title}
-          </span>
-        </div>
-      ) : null}
     </div>
   );
 }
 
 export default function PortfolioPageContent() {
   const projects = getAllProjects();
-  const [zoomedImage, setZoomedImage] = useState<{ src: string; title: string } | null>(null);
+  const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     // Trigger animation on mount
@@ -78,7 +72,7 @@ export default function PortfolioPageContent() {
       }
     };
 
-    if (zoomedImage) {
+    if (zoomedIndex !== null) {
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
     }
@@ -87,14 +81,28 @@ export default function PortfolioPageContent() {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [zoomedImage]);
+  }, [zoomedIndex]);
 
-  const handleImageClick = (image: string, title: string) => {
-    setZoomedImage({ src: image, title });
+  const handleImageClick = (index: number) => {
+    setZoomedIndex(index);
   };
 
   const closeZoom = () => {
-    setZoomedImage(null);
+    setZoomedIndex(null);
+  };
+
+  const showPrev = () => {
+    if (zoomedIndex === null) return;
+    setZoomedIndex((prev) =>
+      prev === null ? prev : (prev - 1 + projects.length) % projects.length
+    );
+  };
+
+  const showNext = () => {
+    if (zoomedIndex === null) return;
+    setZoomedIndex((prev) =>
+      prev === null ? prev : (prev + 1) % projects.length
+    );
   };
 
   return (
@@ -119,7 +127,7 @@ export default function PortfolioPageContent() {
                   opacity: 0,
                 }}
               >
-                <PortfolioCard project={project} onImageClick={handleImageClick} />
+                <PortfolioCard project={project} onImageClick={() => handleImageClick(index)} />
               </div>
             ))}
           </div>
@@ -127,7 +135,7 @@ export default function PortfolioPageContent() {
       </div>
 
       {/* Zoom Modal */}
-      {zoomedImage && (
+      {zoomedIndex !== null && projects[zoomedIndex] && (
         <div
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 backdrop-blur-sm p-4 py-16 sm:py-4 animate-in fade-in duration-300 overflow-y-auto"
           onClick={closeZoom}
@@ -153,19 +161,38 @@ export default function PortfolioPageContent() {
           >
             <div className="relative w-full flex-shrink-0">
               <Image
-                src={zoomedImage.src}
-                alt={zoomedImage.title}
+                src={projects[zoomedIndex].image ?? ''}
+                alt={projects[zoomedIndex].title}
                 width={1200}
                 height={800}
-                className="max-h-[calc(90vh-80px)] sm:max-h-[calc(90vh-100px)] w-auto max-w-full mx-auto object-contain rounded-lg"
+                className="max-h-[90vh] w-auto max-w-full mx-auto object-contain rounded-lg"
+                unoptimized
                 priority
               />
+              {/* Navigation buttons */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  showPrev();
+                }}
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white hover:bg-black/60 transition-colors"
+                aria-label="Previous image"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  showNext();
+                }}
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white hover:bg-black/60 transition-colors"
+                aria-label="Next image"
+              >
+                ›
+              </button>
             </div>
-            {zoomedImage.title && (
-              <p className="mt-4 sm:mt-6 text-center font-serif text-base sm:text-xl text-white px-4 break-words">
-                {zoomedImage.title}
-              </p>
-            )}
           </div>
         </div>
       )}
