@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 const education = [
   {
     years: 'Higher Secondary',
-    title: 'Arts Education',
+    title: 'Arts Stream',
     description: [
       'I completed my Higher Secondary Education in Arts and decided to discontinue my studies after 12th.',
       'To build a better future and pursue my goals, I chose to move out of my village, as the opportunities I needed were not available there.',
