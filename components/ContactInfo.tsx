@@ -15,7 +15,7 @@ const contactInfo = [
       </svg>
     ),
     label: 'Whatsapp',
-    value: '+976 1234 4444',
+    value: '+91 9886 658 944',
   },
   {
     icon: (
