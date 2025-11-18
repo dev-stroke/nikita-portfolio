@@ -149,13 +149,15 @@ export default function Hero() {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
             <p>
-              Hi, I’m Nikita Assam born, now working in Bengaluru.
+              I sketch, paint, and design custom outfits—switching mediums depending on the story I want to tell.
             </p>
             <p>
-              I walked away from early marriage pressure and unfinished studies to chase the life I imagined.
+              Years of commissions taught me to translate real emotions into pencil work, layered canvas textures,
+              and wearable art with intricate detailing.
             </p>
             <p>
-              Today I juggle a job and my art my identity, escape, and future dream of creating far beyond India.
+              I approach every project like a collaboration—listening first, then crafting pieces that feel
+              personal, grounded in experience, and polished with patience.
             </p>
           </div>
           <div className={`flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start transition-all duration-1000 delay-300 ${
