@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 
 const stats = [
-  { value: 10000, suffix: '+', label: 'Hours of Experience' },
+  { value: 5000, suffix: '+', label: 'Hours of Experience' },
   { value: 100, suffix: '+', label: 'Projects Done' },
   { value: 100, suffix: '+', label: 'Happy Clients' },
 ];
@@ -145,18 +145,17 @@ export default function Hero() {
               Hi! I&apos;m Nikita Chetry.
             </h1>
           </div>
-          <div className={`space-y-3 font-serif text-[clamp(1.30rem,2vw,1.00rem)] italic leading-relaxed text-foreground/40 transition-all duration-1000 delay-200 ${
+          <div className={`space-y-3 font-serif text-[clamp(1.05rem,2vw,0.95rem)] italic leading-relaxed text-foreground/40 transition-all duration-1000 delay-200 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
             <p>
-              A realistic artist who loves creating pencil sketches, canvas paintings,
-              and customized outfit designs.
+              Hi, I’m Nikita Assam born, now working in Bengaluru.
             </p>
             <p>
-              I take art commissions and bring emotions to life through detailed artwork.
+              I walked away from early marriage pressure and unfinished studies to chase the life I imagined.
             </p>
             <p>
-              My work is inspired by real moments and creative imagination.
+              Today I juggle a job and my art my identity, escape, and future dream of creating far beyond India.
             </p>
           </div>
           <div className={`flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start transition-all duration-1000 delay-300 ${

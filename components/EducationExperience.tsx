@@ -10,14 +10,17 @@ export default function EducationExperience() {
             About Me
           </h2>
           <p className="text-sm leading-relaxed text-foreground/70">
-            I&apos;m Nikita, a realistic artist who loves creating pencil sketches, canvas paintings, and
-            customized outfit designs. I take art commissions and bring emotions to life through detailed
-            artwork, inspired by real moments and everyday imagination.
+            Hi, I’m Nikita, an artist from Assam, currently living and working in Bengaluru.
           </p>
           <p className="text-sm leading-relaxed text-foreground/70">
-            After completing my Higher Secondary Education in Arts, I chose to move out of my village to
-            chase better opportunities and build a future on my own terms. That decision shaped the way I
-            work today—independent, curious, and deeply committed to every piece I create.
+            My journey hasn’t been simple. I had to leave my home and studies because of early marriage
+            pressure, but I chose a different path. I chose my dreams.
+          </p>
+          <p className="text-sm leading-relaxed text-foreground/70">
+            I moved out alone to build the life I imagined for myself. Today, I balance a job while actively
+            working on my passion: art. Art is not just a hobby for me it’s my identity, my escape, and my dream
+            for the future. I want to take my artistic journey far ahead and eventually pursue it full-time,
+            even beyond India, including my future goal of working in places.
           </p>
           <div className="relative mt-4 overflow-hidden border border-foreground/15 bg-background/80 px-5 py-6 shadow-sm backdrop-blur-sm">
             <span className="block text-xs font-semibold uppercase tracking-[0.25em] text-foreground/45">
