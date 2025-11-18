@@ -133,7 +133,7 @@ export default function ContactForm() {
       </button>
       {submitStatus === 'success' && (
         <p className="text-green-600 dark:text-green-400 text-center text-sm">
-          Message copied! WhatsApp opened in a new tab.
+          Message copied! Paste in whatsapp and hit send.
         </p>
       )}
 
