@@ -212,7 +212,7 @@ export default function PortfolioPageContent() {
               />
               <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <p className="text-xs sm:text-sm text-white/70 text-center sm:text-left">
-                  Interested in this artwork? Send an inquiry with the category pre-filled.
+                  Interested in this artwork? Send an inquiry and i will reach you soon.
                 </p>
                 <Link
                   href={`/contact?artCategory=${encodeURIComponent(projects[zoomedIndex].category)}`}
