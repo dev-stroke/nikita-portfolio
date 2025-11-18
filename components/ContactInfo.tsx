@@ -25,7 +25,7 @@ const contactInfo = [
       </svg>
     ),
     label: 'Address',
-    value: 'Bangalore, India',
+    value: 'Bengaluru, India',
   },
 ];
 
