@@ -149,14 +149,14 @@ export default function Hero() {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
             <p>
-              I sketch, paint, and design custom outfits—switching mediums depending on the story I want to tell.
+              I sketch, paint, and design custom outfits switching mediums depending on the story I want to tell.
             </p>
             <p>
               Years of commissions taught me to translate real emotions into pencil work, layered canvas textures,
               and wearable art with intricate detailing.
             </p>
             <p>
-              I approach every project like a collaboration—listening first, then crafting pieces that feel
+              I approach every project like a collaboration listening first, then crafting pieces that feel
               personal, grounded in experience, and polished with patience.
             </p>
           </div>
