@@ -1,12 +1,25 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function ContactForm() {
+  const searchParams = useSearchParams();
+  const artworkCategory = searchParams.get('artCategory');
+
+  const prettyCategory =
+    artworkCategory === 'canvas painting'
+      ? 'Canvas Painting'
+      : artworkCategory === 'pencil sketch'
+      ? 'Pencil Sketch'
+      : artworkCategory === 'custom outfits & designs'
+      ? 'Custom Outfits & Designs'
+      : null;
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
+    subject: prettyCategory ? `Inquiry about: ${prettyCategory}` : '',
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -1,8 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
-import { getAllProjects, type Project } from '@/lib/projects';
+import { useSearchParams } from 'next/navigation';
+import { getAllProjects, type Project, type ProjectCategory } from '@/lib/projects';
+
+const CATEGORY_LABELS: { value: 'all' | ProjectCategory; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'canvas painting', label: 'Canvas Painting' },
+  { value: 'pencil sketch', label: 'Pencil Sketch' },
+  { value: 'custom outfits & designs', label: 'Custom Outfits & Designs' },
+];
 
 function PortfolioCard({ project, onImageClick }: { project: Project; onImageClick: () => void }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -49,20 +58,33 @@ function PortfolioCard({ project, onImageClick }: { project: Project; onImageCli
 }
 
 export default function PortfolioPageContent() {
-  const projects = getAllProjects();
+  const allProjects = getAllProjects();
+  const searchParams = useSearchParams();
+  const [activeCategory, setActiveCategory] = useState<'all' | ProjectCategory>('all');
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    // Trigger animation on mount
-    const cards = document.querySelectorAll('[data-portfolio-card]');
-    cards.forEach((card, index) => {
-      (card as HTMLElement).style.animation = 'none';
-      setTimeout(() => {
-        (card as HTMLElement).style.animation = `fadeInUp 0.6s ease-out forwards`;
-        (card as HTMLElement).style.animationDelay = `${index * 100}ms`;
-      }, 10);
-    });
-  }, []);
+    const categoryParam = searchParams.get('category');
+
+    if (!categoryParam) return;
+
+    const paramToCategory: Record<string, 'all' | ProjectCategory> = {
+      all: 'all',
+      'canvas-painting': 'canvas painting',
+      'pencil-sketch': 'pencil sketch',
+      'custom-outfits-designs': 'custom outfits & designs',
+    };
+
+    const mapped = paramToCategory[categoryParam];
+    if (mapped) {
+      setActiveCategory(mapped);
+    }
+  }, [searchParams]);
+
+  const projects =
+    activeCategory === 'all'
+      ? allProjects
+      : allProjects.filter((project) => project.category === activeCategory);
 
   useEffect(() => {
     // Close modal on Escape key
@@ -92,14 +114,14 @@ export default function PortfolioPageContent() {
   };
 
   const showPrev = () => {
-    if (zoomedIndex === null) return;
+    if (zoomedIndex === null || projects.length === 0) return;
     setZoomedIndex((prev) =>
       prev === null ? prev : (prev - 1 + projects.length) % projects.length
     );
   };
 
   const showNext = () => {
-    if (zoomedIndex === null) return;
+    if (zoomedIndex === null || projects.length === 0) return;
     setZoomedIndex((prev) =>
       prev === null ? prev : (prev + 1) % projects.length
     );
@@ -109,13 +131,32 @@ export default function PortfolioPageContent() {
     <>
       <div className="min-h-screen bg-background py-16">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-          <div className="mb-8 text-center">
+          <div className="mb-8 text-center space-y-4">
             <h1 className="font-serif text-[clamp(3rem,5vw,4.5rem)] text-foreground">
               My Latest Works
             </h1>
+            <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-foreground/15 bg-background/60 px-2 py-1">
+              {CATEGORY_LABELS.map((category) => (
+                <button
+                  key={category.value}
+                  type="button"
+                  onClick={() => setActiveCategory(category.value)}
+                  className={`rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] transition ${
+                    activeCategory === category.value
+                      ? 'bg-foreground text-background'
+                      : 'text-foreground/60 hover:bg-foreground/5'
+                  }`}
+                >
+                  {category.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+          <div
+            key={activeCategory}
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 transition-all duration-500"
+          >
             {projects.map((project, index) => (
               <div
                 key={project.slug}
@@ -165,10 +206,22 @@ export default function PortfolioPageContent() {
                 alt={projects[zoomedIndex].title}
                 width={1200}
                 height={800}
-                className="max-h-[90vh] w-auto max-w-full mx-auto object-contain rounded-lg"
+                className="max-h-[80vh] w-auto max-w-full mx-auto object-contain rounded-lg"
                 unoptimized
                 priority
               />
+              <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+                <p className="text-xs sm:text-sm text-white/70 text-center sm:text-left">
+                  Interested in this artwork? Send an inquiry with the category pre-filled.
+                </p>
+                <Link
+                  href={`/contact?artCategory=${encodeURIComponent(projects[zoomedIndex].category)}`}
+                  className="inline-flex items-center rounded-full bg-white text-black px-5 py-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] hover:bg-white/90 transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Enquire about this
+                </Link>
+              </div>
               {/* Navigation buttons */}
               <button
                 type="button"
