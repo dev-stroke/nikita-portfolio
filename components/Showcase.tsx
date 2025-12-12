@@ -23,6 +23,12 @@ const CATEGORY_CARDS = [
     caption: 'Handcrafted outfit concepts with artistic prints and styling.',
     param: 'custom-outfits-designs',
   },
+  {
+    key: 'mural painting' as const,
+    label: 'Mural Painting',
+    caption: 'Large-scale wall paintings that transform spaces with vibrant storytelling.',
+    param: 'mural-painting',
+  },
 ] as const;
 
 export default function Showcase() {

@@ -1,4 +1,4 @@
-export type ProjectCategory = 'canvas painting' | 'pencil sketch' | 'custom outfits & designs';
+export type ProjectCategory = 'canvas painting' | 'pencil sketch' | 'custom outfits & designs' | 'mural painting';
 
 export interface Project {
   slug: string;
@@ -206,6 +206,30 @@ const projects: Project[] = [
     title: 'PicsArt_09-06-10.38.03',
     image: '/images/portfolio/pencilsketch/PicsArt_09-06-10.38.03.webp',
     category: 'pencil sketch',
+  },
+  {
+    slug: '20240505-224225',
+    title: '20240505_224225',
+    image: '/images/portfolio/muralpainting/20240505_224225.jpg',
+    category: 'mural painting',
+  },
+  {
+    slug: '20251128-170106',
+    title: '20251128_170106',
+    image: '/images/portfolio/muralpainting/20251128_170106.jpg',
+    category: 'mural painting',
+  },
+  {
+    slug: 'img-20231014-wa0035',
+    title: 'IMG-20231014-WA0035',
+    image: '/images/portfolio/muralpainting/IMG-20231014-WA0035.jpg',
+    category: 'mural painting',
+  },
+  {
+    slug: 'img-20231017-wa0041',
+    title: 'IMG-20231017-WA0041',
+    image: '/images/portfolio/muralpainting/IMG-20231017-WA0041.jpg',
+    category: 'mural painting',
   },
 ];
 

@@ -11,6 +11,7 @@ const CATEGORY_LABELS: { value: 'all' | ProjectCategory; label: string }[] = [
   { value: 'canvas painting', label: 'Canvas Painting' },
   { value: 'pencil sketch', label: 'Pencil Sketch' },
   { value: 'custom outfits & designs', label: 'Custom Outfits & Designs' },
+  { value: 'mural painting', label: 'Mural Painting' },
 ];
 
 function PortfolioCard({ project, onImageClick }: { project: Project; onImageClick: () => void }) {
@@ -73,6 +74,7 @@ export default function PortfolioPageContent() {
       'canvas-painting': 'canvas painting',
       'pencil-sketch': 'pencil sketch',
       'custom-outfits-designs': 'custom outfits & designs',
+      'mural-painting': 'mural painting',
     };
 
     const mapped = paramToCategory[categoryParam];

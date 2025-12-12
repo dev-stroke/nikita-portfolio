@@ -14,6 +14,8 @@ export default function ContactForm() {
       ? 'Pencil Sketch'
       : artworkCategory === 'custom outfits & designs'
       ? 'Custom Outfits & Designs'
+      : artworkCategory === 'mural painting'
+      ? 'Mural Painting'
       : null;
 
   const [formData, setFormData] = useState({
